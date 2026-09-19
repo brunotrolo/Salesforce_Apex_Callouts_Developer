@@ -1,0 +1,71 @@
+{
+  "_comment": "Dados reais exportados da ORG YourOrg via SOQL. CalculationMatrix nao tem suporte a retrieve via Metadata API — este JSON é o equivalente ao artefato de metadata.",
+  "_source": "sf data query --query 'SELECT Name, InputData, OutputData FROM CalculationMatrixRow WHERE CalculationMatrixVersionId = 0lN000000000000AAA' --target-org YourOrg",
+  "matrix": {
+    "Id": "0lI000000000000AAA",
+    "Name": "API Config",
+    "UniqueName": "API_Config",
+    "Description": "Configuracao de integracoes por API + ambiente + operacao (arquitetura de referencia)."
+  },
+  "version": {
+    "Id": "0lN000000000000AAA",
+    "Name": "API Config V1",
+    "VersionNumber": 1,
+    "IsEnabled": true
+  },
+  "columns": [
+    { "ApiName": "API_Name",             "ColumnType": "Input",  "DisplaySequence": 1 },
+    { "ApiName": "Environment",          "ColumnType": "Input",  "DisplaySequence": 2 },
+    { "ApiName": "Operation",            "ColumnType": "Input",  "DisplaySequence": 3 },
+    { "ApiName": "NamedCredential",      "ColumnType": "Output", "DisplaySequence": 4 },
+    { "ApiName": "Endpoint",             "ColumnType": "Output", "DisplaySequence": 5 },
+    { "ApiName": "Method",               "ColumnType": "Output", "DisplaySequence": 6 },
+    { "ApiName": "Timeout",              "ColumnType": "Output", "DisplaySequence": 7 },
+    { "ApiName": "RetryEnabled",         "ColumnType": "Output", "DisplaySequence": 8 },
+    { "ApiName": "RetryCount",           "ColumnType": "Output", "DisplaySequence": 9 },
+    { "ApiName": "LogEnabled",           "ColumnType": "Output", "DisplaySequence": 10 },
+    { "ApiName": "TokenNamedCredential", "ColumnType": "Output", "DisplaySequence": 11 }
+  ],
+  "rows": [
+    {
+      "Id": "9mt000000000000AAA",
+      "Name": "ACME_CustomerData_Sandbox_getCustomerData",
+      "InputData": {
+        "API_Name": "ACME_CustomerData",
+        "Environment": "Homologacao",
+        "Operation": "getCustomerData"
+      },
+      "OutputData": {
+        "NamedCredential": "ACME_Sandbox",
+        "Endpoint": "/customers/v1/accounts/customer-data",
+        "Method": "GET",
+        "Timeout": "30000",
+        "RetryEnabled": "true",
+        "RetryCount": "1",
+        "LogEnabled": "true",
+        "TokenNamedCredential": ""
+      },
+      "_note": "TokenNamedCredential vazio — row criada antes da coluna ser adicionada ao schema. Corrigir via APIConfigSetup.setup()."
+    },
+    {
+      "Id": "9mt000000000000BBB",
+      "Name": "ACME_CustomerData_Production_getCustomerData",
+      "InputData": {
+        "API_Name": "ACME_CustomerData",
+        "Environment": "Producao",
+        "Operation": "getCustomerData"
+      },
+      "OutputData": {
+        "NamedCredential": "ACME_Production",
+        "Endpoint": "/customers/v1/accounts/customer-data",
+        "Method": "GET",
+        "Timeout": "30000",
+        "RetryEnabled": "true",
+        "RetryCount": "1",
+        "LogEnabled": "true",
+        "TokenNamedCredential": ""
+      },
+      "_note": "TokenNamedCredential vazio — mesma situacao da row de Homologacao."
+    }
+  ]
+}

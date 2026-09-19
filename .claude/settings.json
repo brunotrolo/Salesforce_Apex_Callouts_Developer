@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": ["Bash(*)", "Write", "Edit"],
+    "deny": [
+      "Bash(sf org delete *)",
+      "Bash(sf project delete *)",
+      "Bash(sf data delete *)",
+      "Read(./.env)",
+      "Read(./**/.env)",
+      "Read(./**/*.key)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/skills/apex-callouts-developer/scripts/guard.mjs",
+            "statusMessage": "apex-callouts-developer: checando acao destrutiva/artefato compartilhado"
+          }
+        ]
+      }
+    ]
+  }
+}
