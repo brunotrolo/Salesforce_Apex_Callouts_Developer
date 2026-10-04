@@ -41,8 +41,10 @@ Todo arquivo em `.claude/agents/` **precisa** de frontmatter YAML com `name` e
 ao lado dos agentes e **nunca o despacha** — a falha é silenciosa e a skill parece estar
 completa enquanto suas quatro fases não rodam.
 
-Foi exatamente o que aconteceu aqui: os quatro agentes viviam sem frontmatter enquanto o
-`SKILL.md` os despachava por nome. Se você criar um agente novo, comece pelo frontmatter.
+Ver `.claude/LESSONS.md` para o histórico de falhas reais e as regras que resultaram
+delas. Qualquer falha real nova de subagente/deploy descoberta numa sessão deve ser
+adicionada a `.claude/LESSONS.md`, e esse arquivo deve ser lido no início de qualquer
+tarefa de Fase 3/4 (`generate-tobe` / `validate-tobe`).
 
 ### 2. Artefatos compartilhados mudam para todos
 `APIConnector`, `APIConfigDAO`, `APIException` e o Permission Set `API_Integration` são
@@ -76,6 +78,24 @@ muda o que a skill produz. Trate-os como código.
 
 ### 6. Idioma
 Conteúdo e `README.md` em PT-BR. Falar com o usuário em PT-BR.
+
+## Alinhamento com o framework agentic
+
+- **Subagentes.** Os 4 agentes de fase (`analyze-asis`, `spec-callout`, `generate-tobe`,
+  `validate-tobe`) são um exemplo forte de "uma tarefa bem definida por subagente" — cada
+  um cobre exatamente uma fase do fluxo (Analyze AS IS → Spec → Generate → Validate), sem
+  sobreposição. `.claude/LESSONS.md` registra uma lição concreta já aprendida sobre o modo
+  de falha desse mecanismo: subagente sem frontmatter YAML não é despachado, e a falha é
+  silenciosa.
+- **Verificação antes de terminar.** `validate-tobe.md` é a instância mais forte desse
+  princípio no arsenal: checklist orientado a evidência (Governor Limits, Segurança,
+  Arquitetura, Testes, Metadata) que não aceita "parece correto", mais a exigência de
+  smoke test contra HML antes de qualquer deploy (ver `AGENTS.md:33-34`).
+- **Integração MCP/sistêmica.** A integração real aqui acontece via `sf` CLI direto, não
+  via servidor MCP — e isso é deliberado, pela mesma razão do padrão deploy-guard
+  (`.claude/skills/apex-callouts-developer/scripts/guard.mjs`): controle explícito de
+  comando, não uma camada de abstração por cima dele.
+- **Self-improvement / lessons.** Ver `.claude/LESSONS.md`.
 
 ## Mapa do repositório
 

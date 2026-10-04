@@ -23,6 +23,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "path=$(cat | jq -r '.tool_input.file_path // .tool_input.path // \"\"'); case \"$path\" in *.claude/skills/apex-callouts-developer/scripts/*) node --test .claude/skills/apex-callouts-developer/tests/*.test.mjs ;; esac",
+            "statusMessage": "apex-callouts-developer: rodando testes apos edicao em scripts/"
+          }
+        ]
+      }
     ]
   }
 }
