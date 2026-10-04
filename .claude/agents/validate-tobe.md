@@ -38,6 +38,10 @@ Validar todos os artefatos gerados e entregar o comando de deploy completo.
 - [ ] Cenários: sucesso + erro HTTP + param inválido + override ambiente
 - [ ] `Assert.*` com mensagens descritivas
 - [ ] Cobertura ≥ 75%
+- [ ] **Autocontida**: nenhuma query SOQL literal contra `RecordType`/`Profile`/
+      `PermissionSet`/`Queue`/`Group`/`UserRole`/`BusinessHours`/`Organization`
+      filtrando por `Name`/`DeveloperName`, e nenhuma chamada a método estático de
+      outra classe `*ConnectorTest` (ver `.claude/LESSONS.md`)
 
 ### Metadata
 - [ ] NC Token: `allowMergeFieldsInHeader=true`, EC Custom (não OAuth)

@@ -18,6 +18,15 @@ Usa ACMEConnector (references/apex/ACMEConnector.cls) como referência concreta.
 5. `AuraHandledException` em todos os `@AuraEnabled`
 6. Cobertura mínima 75% — gerar todos os cenários de mock
 7. Sem `System.debug()` no path principal
+8. **`XConnectorTest.cls` é AUTOCONTIDA** — nunca uma query SOQL literal contra um
+   objeto de configuração da org (`RecordType`/`Profile`/`PermissionSet`/`Queue`/
+   `Group`/`UserRole`/`BusinessHours`/`Organization`) filtrando por `Name`/
+   `DeveloperName`, e nunca uma chamada a método estático de OUTRA classe
+   `*ConnectorTest`. O template já resolve isso certo via `APIConfigDAO.mockConfig`
+   (tudo em memória, nunca lido/criado na org) — se uma operação nova genuinamente
+   precisar de um Id de RecordType/config real, use `Schema....
+   getRecordTypeInfosByDeveloperName()` (describe) em vez de SOQL, nunca assuma a
+   linha presente por nome literal (ver `.claude/LESSONS.md`).
 
 ## Sequência de Geração
 1. XConnector.cls — usar template da SKILL.md seção Fase 3

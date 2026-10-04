@@ -62,6 +62,58 @@ export function classifyWrite(filePath) {
   };
 }
 
+// Autocontenção da classe de teste do connector (generate-tobe.md, regra 8).
+// Falha real observada na skill irmã apex-test-loop: uma classe de teste bateu a
+// meta de cobertura localmente mas quebrou o deploy em PRODUÇÃO porque consultava um
+// artefato de configuração da org que não existia naquele ambiente. O template desta
+// skill já resolve isso certo (tudo via `APIConfigDAO.mockConfig`, em memória) — este
+// guard é a trava estrutural contra uma geração futura que se desviar do template.
+const CONFIG_SOBJECT_QUERY_RE =
+  /\[\s*SELECT\b[\s\S]{0,400}?\bFROM\s+(RecordType|Profile|PermissionSet|PermissionSetGroup|Queue|Group|UserRole|BusinessHours|Organization)\b[\s\S]{0,400}?\bWHERE\b[\s\S]{0,200}?\b(Name|DeveloperName|MasterLabel)\s*=/i;
+const CROSS_TEST_CLASS_CALL_RE = /\b([A-Za-z_][A-Za-z0-9_]*ConnectorTest)\s*\.\s*[A-Za-z_][A-Za-z0-9_]*\s*\(/g;
+
+export function classifySelfContainment(filePath, content) {
+  const name = basename(String(filePath || '')).toLowerCase();
+  if (!name.endsWith('connectortest.cls')) return { blocked: false };
+
+  const src = String(content || '');
+  if (!src) return { blocked: false };
+
+  const configMatch = CONFIG_SOBJECT_QUERY_RE.exec(src);
+  if (configMatch) {
+    return {
+      blocked: true,
+      decision: 'ask',
+      why:
+        `query SOQL literal contra objeto de configuração da org (${configMatch[1]}) ` +
+        `filtrando por nome/DeveloperName em ${basename(filePath)}. Essa linha pode não ` +
+        'existir no ambiente de destino (já quebrou um deploy em PRODUÇÃO por isso numa ' +
+        'skill irmã) — use APIConfigDAO.mockConfig (padrão do template) ou describe em ' +
+        'vez de SOQL. Ver generate-tobe.md regra 8.',
+    };
+  }
+
+  const ownClassName = name.replace(/\.cls$/, '');
+  let crossMatch;
+  CROSS_TEST_CLASS_CALL_RE.lastIndex = 0;
+  while ((crossMatch = CROSS_TEST_CLASS_CALL_RE.exec(src))) {
+    const calledClass = crossMatch[1];
+    if (calledClass.toLowerCase() !== ownClassName) {
+      return {
+        blocked: true,
+        decision: 'ask',
+        why:
+          `chamada a método estático de OUTRA classe de teste (${calledClass}) dentro ` +
+          `de ${basename(filePath)}. Cada XConnectorTest cria/mocka os próprios dados via ` +
+          'APIConfigDAO.mockConfig — não dependa de setup de outro connector. Ver ' +
+          'generate-tobe.md regra 8.',
+      };
+    }
+  }
+
+  return { blocked: false };
+}
+
 function deny(reason) {
   process.stdout.write(
     JSON.stringify({
@@ -106,6 +158,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         const path = input.file_path || input.path;
         const r = classifyWrite(path);
         if (r.blocked) return finish(() => ask(r.why));
+        const sc = classifySelfContainment(path, input.content ?? input.new_string);
+        if (sc.blocked) return finish(() => ask(sc.why));
       }
     } catch {
       // Payload malformado: fica fora do caminho em vez de bloquear por bug do guard.
