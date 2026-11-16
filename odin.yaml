@@ -39,6 +39,8 @@ agentes:
   - .claude/agents/validate-tobe.md
 regras:
   - .claude/rules/karpathy-guidelines.md
+politicas:
+  - sf-callouts-developer
 avaliacoes: evals/
 runtime:
   dir: .claude/skills/apex-callouts-developer/scripts
