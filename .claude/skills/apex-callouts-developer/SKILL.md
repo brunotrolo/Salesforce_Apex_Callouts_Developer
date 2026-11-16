@@ -440,3 +440,4 @@ Todos os artefatos de referência ficam em `references/` desta skill:
 | `references/docs/decisao-autenticacao.md` | ADR: por que Custom EC e não OAuth nativo |
 | `references/docs/tobe-passo-a-passo-nova-api.md` | Guia operacional para nova API |
 | `references/docs/tobe-arquitetura-integracoes.md` | Arquitetura completa TO BE |
+| `references/docs/tobe-arquitetura-integracoes-resumo.md` | Resumo, checklist e proximos passos da arquitetura TO BE |
