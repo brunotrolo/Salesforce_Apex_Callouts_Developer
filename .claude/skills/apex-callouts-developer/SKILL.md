@@ -15,6 +15,9 @@ metadata:
     - "platform-apex-generate"
 ---
 
+> **Primeiro passo (Odin):** rode `odin ensure sf-callouts-developer` e só continue se a resposta tiver `"ok": true`.
+
+
 # Apex Callouts Developer
 
 > Transforma qualquer input de callout em artefatos completos prontos para deploy

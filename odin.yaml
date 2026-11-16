@@ -1,0 +1,39 @@
+# Contrato da skill no Odin (schemas/odin.schema.json). Mantido neste repositório; o catálogo só lê.
+id: sf-callouts-developer
+nome: Apex Callouts Developer
+dominio: salesforce
+dono: mantenedor
+descricao: Integrações HTTP em Apex. Cria ou refatora callouts para a arquitetura de referência, com Named Credential, External Credential, tabela de rotas e cache de token, a partir de um curl, de uma classe legada ou de uma descrição.
+intencoes:
+  - refatorar este callout para o padrão de integração
+  - criar a integração com a API externa
+  - transformar este curl em um callout Apex
+  - migrar o webservice legado para Named Credential
+  - criar um connector HTTP para o serviço do parceiro
+  - configurar External Credential e cache de token
+  - integrar o Salesforce com o endpoint REST
+  - texto: construir a jornada completa da spec
+    negativa: true
+  - texto: investigar por que o callout falhou em produção
+    negativa: true
+perfis_sugeridos:
+  - dev
+  - arquiteto
+proximo:
+  - sf-apex-cover-loop
+skills:
+  - path: .claude/skills/apex-callouts-developer/SKILL.md
+agentes:
+  - .claude/agents/analyze-asis.md
+  - .claude/agents/generate-tobe.md
+  - .claude/agents/spec-callout.md
+  - .claude/agents/validate-tobe.md
+regras:
+  - .claude/rules/karpathy-guidelines.md
+avaliacoes: evals/
+runtime:
+  dir: .claude/skills/apex-callouts-developer/scripts
+  node: ">=20"
+  prerequisitos:
+    - node
+    - git
